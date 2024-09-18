@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./index.js" defer></script>
+    <link rel="stylesheet" href="./index.css">
+    <title>Kanji Search</title>
+</head>
+<body>
+    <div id="main">
+        <h1 id="header">Kanji Search (based on JPDBv2 frequency list)</h1>
+        <div>
+            <div>
+                <label for="kanjis-input">Kanjis</label>
+            </div>
+            <textarea id="kanjis-input"></textarea>
+        </div>
+        <div id="filter">
+            <label for="unknown-kanji-count-input">Unknown kanji count</label>
+            <input type="text" id="unknown-kanji-count-input" placeholder="Enter a number" value="0">
+            <label for="kanji-only-checkbox">Kanji only</label>
+            <input type="checkbox" id="kanji-only-checkbox">
+        </div>
+        <button type="button" id="search">Search</button>
+        <div id="stats"></div>
+        <div id="list"></div>
+    </div>
+</body>
+
+</html>

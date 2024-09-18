@@ -1,0 +1,78 @@
+* {
+  font-family: "Helvetica";
+}
+html {
+  overflow-y: scroll;
+}
+.term,
+.reading,
+#kanjis-input {
+  font-family: "Noto Sans JP", sans-serif;
+}
+#main {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#kanjis-input {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  min-width: 80vw;
+  min-height: 10vh;
+  font-size: 1.25rem;
+}
+.freq {
+  font-size: 0.75rem;
+  margin-right: 1rem;
+  display: inline-block;
+  width: 4rem;
+  text-align: right;
+}
+.term {
+  font-size: 1.25rem;
+}
+.reading {
+  font-size: 0.75rem;
+  color: #6b6b6b;
+}
+.known {
+  color: blueviolet;
+  font-weight: 600;
+}
+#header {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+#list {
+  margin-top: 1rem;
+}
+#search {
+  background-color: blueviolet;
+  color: white;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-width: 0;
+  cursor: pointer;
+}
+#stats {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+#filter {
+  margin-bottom: 1rem;
+}
+#filter input {
+  margin-left: 0.5rem;
+  margin-right: 1rem;
+}
+#unknown-kanji-count-input {
+  text-align: right;
+  width: 2rem;
+}
+#kanji-only-checkbox {
+  accent-color: blueviolet;
+}
