@@ -32,6 +32,6 @@ for i in range(20):
     print(items[i])
 print(f"Total terms: {len(data)}")
 print(f"Total terms with kanji: {len(items)}")
-with open("freq.json", mode="w", encoding="utf-8") as f:
+with open("dict.json", mode="w", encoding="utf-8") as f:
     json.dump(items, f, ensure_ascii=False, separators=(',', ':'))
     print("Done.")

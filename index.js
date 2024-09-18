@@ -1,9 +1,9 @@
-let freqDict;
+let dict;
 let inputKanjiSet = new Set();
 
 const loadJSON = async () => {
   const data = await fetch("freq.json");
-  freqDict = await data.json();
+  dict = await data.json();
   console.log("dict loaded");
 };
 loadJSON();
@@ -70,7 +70,7 @@ const search = () => {
 
   const items = [];
   const otherKanjiCountAny = otherKanjiCountInput.value === "-1";
-  for (const [term, kanjiList, reading, freq] of freqDict) {
+  for (const [term, kanjiList, reading, freq] of dict) {
     let otherKanjiCount = 0;
     let termHasOnlyKanji = false;
     let termKanjiSet = new Set();
@@ -108,8 +108,8 @@ const search = () => {
     }
   }
 
-  const percentage = ((items.length / freqDict.length) * 100).toFixed(4);
-  stats.innerHTML = `${items.length}/${freqDict.length} entries (${percentage}%)`;
+  const percentage = ((items.length / dict.length) * 100).toFixed(4);
+  stats.innerHTML = `${items.length}/${dict.length} entries (${percentage}%)`;
 
   for (const [term, kanjiList, reading, freq] of items) {
     const div = createText(term, reading, freq);
