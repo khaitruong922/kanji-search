@@ -2,7 +2,7 @@ let dict;
 let inputKanjiSet = new Set();
 
 const loadJSON = async () => {
-  const data = await fetch("freq.json");
+  const data = await fetch("dict.json");
   dict = await data.json();
   console.log("dict loaded");
 };
