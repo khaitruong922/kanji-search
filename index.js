@@ -109,7 +109,7 @@ const search = () => {
     }
   }
 
-  const percentage = ((items.length / freqDict.length) * 100).toFixed(2);
+  const percentage = ((items.length / freqDict.length) * 100).toFixed(4);
   stats.innerHTML = `${items.length}/${freqDict.length} entries (${percentage}%)`;
 
   for (const [term, kanjiList, reading, freq] of items) {

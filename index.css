@@ -72,6 +72,7 @@ html {
   text-align: right;
   width: 2rem;
 }
-#kanji-only-checkbox {
+#kanji-only-checkbox,
+#contains-all-checkbox {
   accent-color: blueviolet;
 }
