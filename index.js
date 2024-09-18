@@ -62,6 +62,7 @@ const search = () => {
   stats.innerHTML = "";
 
   const items = [];
+  const unknownKanjiCountAny = unknownKanjiCountInput.value === "-1";
   for (const [term, kanjis, reading, freq] of freqDict) {
     let unknownKanjiCount = 0;
     let hasKnownKanji = false;
@@ -82,7 +83,8 @@ const search = () => {
 
     if (
       hasKnownKanji &&
-      unknownKanjiCount === Number(unknownKanjiCountInput.value) &&
+      (unknownKanjiCountAny ||
+        unknownKanjiCount === Number(unknownKanjiCountInput.value)) &&
       (!kanjiOnlyCheckbox.checked || termHasOnlyKanji)
     ) {
       items.push([term, kanjis, reading, freq]);
