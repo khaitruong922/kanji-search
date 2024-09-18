@@ -6,7 +6,7 @@ html {
 }
 .term,
 .reading,
-#kanjis-input {
+#kanji-list-input {
   font-family: "Noto Sans JP", sans-serif;
 }
 #main {
@@ -15,11 +15,10 @@ html {
   flex-direction: column;
   align-items: center;
 }
-#kanjis-input {
+#kanji-list-input {
   margin-top: 0.5rem;
   margin-bottom: 1rem;
   min-width: 80vw;
-  min-height: 10vh;
   font-size: 1.25rem;
 }
 .freq {

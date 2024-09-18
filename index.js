@@ -1,5 +1,5 @@
 let freqDict;
-let knownKanjiSet = new Set();
+let knownkanjiSet = new Set();
 const loadJSON = async () => {
   const data = await fetch("freq.json");
   freqDict = await data.json();
@@ -7,11 +7,11 @@ const loadJSON = async () => {
 };
 loadJSON();
 
-const kanjisInput = document.getElementById("kanjis-input");
-kanjisInput.addEventListener("input", () => {
-  localStorage.setItem("kanjis", kanjisInput.value);
+const kanjiListInput = document.getElementById("kanji-list-input");
+kanjiListInput.addEventListener("input", () => {
+  localStorage.setItem("kanjiList", kanjiListInput.value);
 });
-kanjisInput.value = localStorage.getItem("kanjis") || "色";
+kanjiListInput.value = localStorage.getItem("kanjiList") || "色";
 
 const unknownKanjiCountInput = document.getElementById(
   "unknown-kanji-count-input"
@@ -25,7 +25,15 @@ const kanjiOnlyCheckbox = document.getElementById("kanji-only-checkbox");
 kanjiOnlyCheckbox.addEventListener("change", () => {
   localStorage.setItem("kanjiOnly", kanjiOnlyCheckbox.checked);
 });
-kanjiOnlyCheckbox.checked = localStorage.getItem("kanjiOnly") === "true";
+kanjiOnlyCheckbox.checked =
+  localStorage.getItem("kanjiOnly") === "true" || false;
+
+const containsAllCheckbox = document.getElementById("contains-all-checkbox");
+containsAllCheckbox.addEventListener("change", () => {
+  localStorage.setItem("containsAll", containsAllCheckbox.checked);
+});
+containsAllCheckbox.checked =
+  localStorage.getItem("containsAll") === "true" || false;
 
 const resultList = document.getElementById("list");
 const stats = document.getElementById("stats");
@@ -41,7 +49,7 @@ const createText = (term, reading, freq) => {
   for (const char in term) {
     const charSpan = document.createElement("span");
     charSpan.textContent = term[char];
-    if (knownKanjiSet.has(term[char])) {
+    if (knownkanjiSet.has(term[char])) {
       charSpan.classList.add("known");
     }
     termSpan.appendChild(charSpan);
@@ -55,46 +63,56 @@ const createText = (term, reading, freq) => {
 };
 
 const search = () => {
-  const knownKanjis = kanjisInput.value;
-  knownKanjiSet = new Set(knownKanjis);
+  const knownkanjiList = kanjiListInput.value;
+  knownkanjiSet = new Set(knownkanjiList);
 
   resultList.innerHTML = "";
   stats.innerHTML = "";
 
   const items = [];
   const unknownKanjiCountAny = unknownKanjiCountInput.value === "-1";
-  for (const [term, kanjis, reading, freq] of freqDict) {
+  for (const [term, kanjiList, reading, freq] of freqDict) {
     let unknownKanjiCount = 0;
-    let hasKnownKanji = false;
     let termHasOnlyKanji = false;
+    let termkanjiSet = new Set();
 
     const termWithoutKanjiRepititon = term.replace(/々/g, "");
-    if (termWithoutKanjiRepititon === kanjis) {
+    if (termWithoutKanjiRepititon === kanjiList) {
       termHasOnlyKanji = true;
     }
 
-    for (const kanji of kanjis) {
-      if (!knownKanjiSet.has(kanji)) {
+    for (const kanji of kanjiList) {
+      if (!knownkanjiSet.has(kanji)) {
         unknownKanjiCount++;
       } else {
-        hasKnownKanji = true;
+        termkanjiSet.add(kanji);
       }
     }
 
+    const hasAllKanji = termkanjiSet.size === knownkanjiSet.size;
+    const hasAnyKanji = termkanjiSet.size > 0;
+
+    const hasAnyCondition = hasAnyKanji;
+    const hasAllCondition = !containsAllCheckbox.checked || hasAllKanji;
+    const unknownKanjiCountCondition =
+      unknownKanjiCountAny ||
+      unknownKanjiCount === Number(unknownKanjiCountInput.value);
+    const kanjiOnlyCondition = !kanjiOnlyCheckbox.checked || termHasOnlyKanji;
+
     if (
-      hasKnownKanji &&
-      (unknownKanjiCountAny ||
-        unknownKanjiCount === Number(unknownKanjiCountInput.value)) &&
-      (!kanjiOnlyCheckbox.checked || termHasOnlyKanji)
+      hasAnyCondition &&
+      hasAllCondition &&
+      unknownKanjiCountCondition &&
+      kanjiOnlyCondition
     ) {
-      items.push([term, kanjis, reading, freq]);
+      items.push([term, kanjiList, reading, freq]);
     }
   }
 
   const percentage = ((items.length / freqDict.length) * 100).toFixed(2);
   stats.innerHTML = `${items.length}/${freqDict.length} entries (${percentage}%)`;
 
-  for (const [term, kanjis, reading, freq] of items) {
+  for (const [term, kanjiList, reading, freq] of items) {
     const div = createText(term, reading, freq);
     resultList.appendChild(div);
   }

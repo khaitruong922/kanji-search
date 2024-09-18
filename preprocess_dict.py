@@ -21,10 +21,10 @@ with open(filename, mode="r", encoding="utf-8") as f:
         term = row[0]
         term_data = row[2]
         reading = term_data["reading"]
-        kanjis = remove_non_kanji(term)
+        kanji_list = remove_non_kanji(term)
         freq = term_data["frequency"]["value"]
-        if len(kanjis) > 0:
-            items.append([term, kanjis, reading, freq])
+        if len(kanji_list) > 0:
+            items.append([term, kanji_list, reading, freq])
 
 
 print("Output:")
