@@ -13,13 +13,11 @@ kanjiListInput.addEventListener("input", () => {
 });
 kanjiListInput.value = localStorage.getItem("kanjiList") || "色";
 
-const unknownKanjiCountInput = document.getElementById(
-  "unknown-kanji-count-input"
-);
-unknownKanjiCountInput.addEventListener("input", () => {
-  localStorage.setItem("unknownKanjiCount", unknownKanjiCountInput.value);
+const otherKanjiCountInput = document.getElementById("other-kanji-count-input");
+otherKanjiCountInput.addEventListener("input", () => {
+  localStorage.setItem("otherKanjiCount", otherKanjiCountInput.value);
 });
-unknownKanjiCountInput.value = localStorage.getItem("unknownKanjiCount") || "0";
+otherKanjiCountInput.value = localStorage.getItem("otherKanjiCount") || "0";
 
 const kanjiOnlyCheckbox = document.getElementById("kanji-only-checkbox");
 kanjiOnlyCheckbox.addEventListener("change", () => {
@@ -63,16 +61,16 @@ const createText = (term, reading, freq) => {
 };
 
 const search = () => {
-  const knownkanjiList = kanjiListInput.value;
-  knownkanjiSet = new Set(knownkanjiList);
+  const knownKanjiList = kanjiListInput.value;
+  knownkanjiSet = new Set(knownKanjiList);
 
   resultList.innerHTML = "";
   stats.innerHTML = "";
 
   const items = [];
-  const unknownKanjiCountAny = unknownKanjiCountInput.value === "-1";
+  const otherKanjiCountAny = otherKanjiCountInput.value === "-1";
   for (const [term, kanjiList, reading, freq] of freqDict) {
-    let unknownKanjiCount = 0;
+    let otherKanjiCount = 0;
     let termHasOnlyKanji = false;
     let termkanjiSet = new Set();
 
@@ -83,7 +81,7 @@ const search = () => {
 
     for (const kanji of kanjiList) {
       if (!knownkanjiSet.has(kanji)) {
-        unknownKanjiCount++;
+        otherKanjiCount++;
       } else {
         termkanjiSet.add(kanji);
       }
@@ -94,15 +92,15 @@ const search = () => {
 
     const hasAnyCondition = hasAnyKanji;
     const hasAllCondition = !containsAllCheckbox.checked || hasAllKanji;
-    const unknownKanjiCountCondition =
-      unknownKanjiCountAny ||
-      unknownKanjiCount === Number(unknownKanjiCountInput.value);
+    const otherKanjiCountCondition =
+      otherKanjiCountAny ||
+      otherKanjiCount === Number(otherKanjiCountInput.value);
     const kanjiOnlyCondition = !kanjiOnlyCheckbox.checked || termHasOnlyKanji;
 
     if (
       hasAnyCondition &&
       hasAllCondition &&
-      unknownKanjiCountCondition &&
+      otherKanjiCountCondition &&
       kanjiOnlyCondition
     ) {
       items.push([term, kanjiList, reading, freq]);
