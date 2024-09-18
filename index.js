@@ -1,9 +1,10 @@
 let freqDict;
-let knownkanjiSet = new Set();
+let inputKanjiSet = new Set();
+
 const loadJSON = async () => {
   const data = await fetch("freq.json");
   freqDict = await data.json();
-  console.log("data loaded");
+  console.log("dict loaded");
 };
 loadJSON();
 
@@ -47,7 +48,7 @@ const createText = (term, reading, freq) => {
   for (const char in term) {
     const charSpan = document.createElement("span");
     charSpan.textContent = term[char];
-    if (knownkanjiSet.has(term[char])) {
+    if (inputKanjiSet.has(term[char])) {
       charSpan.classList.add("known");
     }
     termSpan.appendChild(charSpan);
@@ -62,7 +63,7 @@ const createText = (term, reading, freq) => {
 
 const search = () => {
   const knownKanjiList = kanjiListInput.value;
-  knownkanjiSet = new Set(knownKanjiList);
+  inputKanjiSet = new Set(knownKanjiList);
 
   resultList.innerHTML = "";
   stats.innerHTML = "";
@@ -72,7 +73,7 @@ const search = () => {
   for (const [term, kanjiList, reading, freq] of freqDict) {
     let otherKanjiCount = 0;
     let termHasOnlyKanji = false;
-    let termkanjiSet = new Set();
+    let termKanjiSet = new Set();
 
     const termWithoutKanjiRepititon = term.replace(/々/g, "");
     if (termWithoutKanjiRepititon === kanjiList) {
@@ -80,15 +81,15 @@ const search = () => {
     }
 
     for (const kanji of kanjiList) {
-      if (!knownkanjiSet.has(kanji)) {
+      if (!inputKanjiSet.has(kanji)) {
         otherKanjiCount++;
       } else {
-        termkanjiSet.add(kanji);
+        termKanjiSet.add(kanji);
       }
     }
 
-    const hasAllKanji = termkanjiSet.size === knownkanjiSet.size;
-    const hasAnyKanji = termkanjiSet.size > 0;
+    const hasAllKanji = termKanjiSet.size === inputKanjiSet.size;
+    const hasAnyKanji = termKanjiSet.size > 0;
 
     const hasAnyCondition = hasAnyKanji;
     const hasAllCondition = !containsAllCheckbox.checked || hasAllKanji;
