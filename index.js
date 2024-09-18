@@ -109,7 +109,7 @@ const search = () => {
   }
 
   const percentage = ((items.length / dict.length) * 100).toFixed(4);
-  stats.innerHTML = `${items.length}/${dict.length} entries (${percentage}%)`;
+  stats.innerHTML = `${items.length} of ${dict.length} entries (${percentage}%)`;
 
   for (const [term, kanjiList, reading, freq] of items) {
     const div = createText(term, reading, freq);
