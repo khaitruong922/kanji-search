@@ -28,6 +28,7 @@ const resultList = document.getElementById('list');
 const stats = document.getElementById('stats');
 const statsNote = document.getElementById('stats-note');
 const progress = document.getElementById('progress');
+const exportTxtBtn = document.getElementById('export-txt');
 
 let dict;
 let inputKanjiSet = new Set();
@@ -152,9 +153,23 @@ const search = async () => {
   stats.innerHTML = `${items.length} of ${dict.length} entries* (${percentage}%)`;
   progress.hidden = items.length <= BATCH_SIZE;
   progress.max = items.length;
+  exportTxtBtn.hidden = items.length === 0;
 
   insertResultInBatch();
 };
 
+const exportTxt = () => {
+  const text = items.map(([term, kanjiList, reading, freq]) => {
+    return `${term}`;
+  });
+  const blob = new Blob([text.join('\n')], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'terms.txt';
+  a.click();
+};
+
 const btn = document.getElementById('search');
 btn.addEventListener('click', search);
+exportTxtBtn.addEventListener('click', exportTxt);

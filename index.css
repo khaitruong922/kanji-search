@@ -75,6 +75,12 @@ html {
   color: #6b6b6b;
   text-align: center;
 }
+#export-txt {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: blueviolet;
+  cursor: pointer;
+}
 #kanji-list-label {
   font-size: 1.25rem;
   font-weight: 600;
