@@ -1,5 +1,5 @@
 * {
-  font-family: "Helvetica";
+  font-family: 'Helvetica';
 }
 html {
   overflow-y: scroll;
@@ -7,7 +7,13 @@ html {
 .term,
 .reading,
 #kanji-list-input {
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+#kanji-list-input,
+#kanji-list-input:focus {
+  padding: 0.5rem;
+  border: 2px solid blueviolet;
+  outline: none;
 }
 #main {
   padding: 1rem;
@@ -42,6 +48,7 @@ html {
 #header {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+  text-align: center;
 }
 #list {
   margin-top: 1rem;
@@ -60,18 +67,29 @@ html {
   margin-top: 1rem;
   font-size: 1.25rem;
   font-weight: 500;
+  text-align: center;
 }
 #stats-note {
   margin-top: 0.25rem;
   font-size: 0.75rem;
   color: #6b6b6b;
+  text-align: center;
+}
+#kanji-list-label {
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 #filter {
   margin-bottom: 1rem;
 }
-#filter input {
-  margin-left: 0.5rem;
-  margin-right: 1rem;
+.filter-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.filter-item label {
+  flex: 1;
+  padding-right: 1rem;
 }
 #other-kanji-count-input {
   text-align: right;
