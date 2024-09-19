@@ -32,12 +32,12 @@ const progress = document.getElementById("progress");
 let dict;
 let inputKanjiSet = new Set();
 
-const loadJSON = async () => {
+const loadDict = async () => {
   const data = await fetch("dict.json");
   dict = await data.json();
   console.log("dict loaded");
 };
-loadJSON();
+loadDict();
 
 const createText = (term, reading, freq) => {
   const div = document.createElement("div");
@@ -69,18 +69,18 @@ const items = [];
 
 let inserting = false;
 let interrupted = false;
+const BATCH_SIZE = 1000;
 
 const insertResultInBatch = async () => {
-  const chunkSize = 1000;
   inserting = true;
-  for (let i = 0; i < items.length; i += chunkSize) {
-    progress.value = Math.min(i + chunkSize, items.length);
+  for (let i = 0; i < items.length; i += BATCH_SIZE) {
+    progress.value = Math.min(i + BATCH_SIZE, items.length);
     if (interrupted) {
       inserting = false;
       interrupted = false;
       return;
     }
-    const chunk = items.slice(i, i + chunkSize);
+    const chunk = items.slice(i, i + BATCH_SIZE);
     for (const [term, kanjiList, reading, freq] of chunk) {
       const div = createText(term, reading, freq);
       resultList.appendChild(div);
@@ -91,7 +91,6 @@ const insertResultInBatch = async () => {
 };
 
 const search = async () => {
-  console.log("inserting", inserting, "interrupted", interrupted);
   if (inserting) {
     interrupted = true;
     while (true) {
@@ -151,7 +150,7 @@ const search = async () => {
   const percentage = ((items.length / dict.length) * 100).toFixed(4);
   statsNote.hidden = false;
   stats.innerHTML = `${items.length} of ${dict.length} entries* (${percentage}%)`;
-  progress.hidden = false;
+  progress.hidden = items.length <= BATCH_SIZE;
   progress.max = items.length;
 
   insertResultInBatch();
