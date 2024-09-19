@@ -171,5 +171,15 @@ const exportTxt = () => {
 };
 
 const btn = document.getElementById('search');
+kanjiListInput.addEventListener('keydown', (e) => {
+  if (e.isComposing) {
+    return;
+  }
+  const { code, key } = e;
+  if (!(code === 'Enter' || key === 'Enter' || code === 'NumpadEnter')) {
+    return;
+  }
+  search();
+});
 btn.addEventListener('click', search);
 exportTxtBtn.addEventListener('click', exportTxt);
