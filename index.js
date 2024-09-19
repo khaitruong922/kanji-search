@@ -62,8 +62,8 @@ const createText = (term, reading, freq) => {
 };
 
 const search = () => {
-  const knownKanjiList = kanjiListInput.value;
-  inputKanjiSet = new Set(knownKanjiList);
+  const inputKanjiList = kanjiListInput.value;
+  inputKanjiSet = new Set(inputKanjiList);
 
   resultList.innerHTML = "";
   stats.innerHTML = "";
@@ -73,7 +73,7 @@ const search = () => {
   for (const [term, kanjiList, reading, freq] of dict) {
     let otherKanjiCount = 0;
     let termHasOnlyKanji = false;
-    let termKanjiSet = new Set();
+    let termKanjiOverlap = new Set();
 
     const termWithoutKanjiRepititon = term.replace(/々/g, "");
     if (termWithoutKanjiRepititon === kanjiList) {
@@ -84,12 +84,12 @@ const search = () => {
       if (!inputKanjiSet.has(kanji)) {
         otherKanjiCount++;
       } else {
-        termKanjiSet.add(kanji);
+        termKanjiOverlap.add(kanji);
       }
     }
 
-    const hasAllKanji = termKanjiSet.size === inputKanjiSet.size;
-    const hasAnyKanji = termKanjiSet.size > 0;
+    const hasAllKanji = termKanjiOverlap.size === inputKanjiSet.size;
+    const hasAnyKanji = termKanjiOverlap.size > 0;
 
     const hasAnyCondition = hasAnyKanji;
     const hasAllCondition = !containsAllCheckbox.checked || hasAllKanji;
