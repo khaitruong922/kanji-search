@@ -75,12 +75,12 @@ const BATCH_SIZE = 1000;
 const insertResultInBatch = async () => {
   inserting = true;
   for (let i = 0; i < items.length; i += BATCH_SIZE) {
-    progress.value = Math.min(i + BATCH_SIZE, items.length);
     if (interrupted) {
       inserting = false;
       interrupted = false;
       return;
     }
+    progress.value = Math.min(i + BATCH_SIZE, items.length);
     const chunk = items.slice(i, i + BATCH_SIZE);
     for (const [term, kanjiList, reading, freq] of chunk) {
       const div = createText(term, reading, freq);
