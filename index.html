@@ -1,43 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="./index.js" defer></script>
-    <link rel="stylesheet" href="./index.css" />
-    <title>Kanji Search</title>
-  </head>
-  <body>
-    <div id="main">
-      <h1 id="header">Kanji Search (based on JPDBv2 frequency list)</h1>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="./index.js" defer></script>
+  <link rel="stylesheet" href="./index.css">
+  <title>Kanji Search</title>
+</head>
+
+<body>
+  <div id="main">
+    <h1 id="header">Kanji Search (based on JPDBv2 frequency list)</h1>
+    <div>
       <div>
-        <div>
-          <label id="kanji-list-label" for="kanji-list-input">Kanji List</label>
-        </div>
-        <input type="text" id="kanji-list-input" />
+        <label id="kanji-list-label" for="kanji-list-input">Kanji List</label>
       </div>
-      <div id="filter">
-        <div class="filter-item">
-          <label for="other-kanji-count-input"
-            >Other kanji count <strong>(any: -1)</strong></label
-          >
-          <input type="text" id="other-kanji-count-input" value="0" />
-        </div>
-        <div class="filter-item">
-          <label for="kanji-only-checkbox">Kanji only</label>
-          <input type="checkbox" id="kanji-only-checkbox" />
-        </div>
-        <div class="filter-item">
-          <label for="contains-all-checkbox">Contains all</label>
-          <input type="checkbox" id="contains-all-checkbox" />
-        </div>
-      </div>
-      <button type="button" id="search">Search</button>
-      <div id="stats"></div>
-      <div id="stats-note" hidden>*having at least 1 kanji</div>
-      <div id="export-txt" hidden>Export TXT</div>
-      <progress id="progress" hidden></progress>
-      <div id="list"></div>
+      <input type="text" id="kanji-list-input">
     </div>
-  </body>
+    <div id="filter">
+      <div class="filter-item">
+        <label for="other-kanji-count-input">Other kanji count <strong>(any: -1)</strong></label>
+        <input type="text" id="other-kanji-count-input" value="0">
+      </div>
+      <div class="filter-item">
+        <label for="kanji-only-checkbox">Kanji only</label>
+        <input type="checkbox" id="kanji-only-checkbox">
+      </div>
+      <div class="filter-item">
+        <label for="contains-all-checkbox">Contains all</label>
+        <input type="checkbox" id="contains-all-checkbox">
+      </div>
+      <div class="filter-item">
+        <label for="inverse-result-checkbox">Inverse result</label>
+        <input type="checkbox" id="inverse-result-checkbox">
+      </div>
+    </div>
+    <button type="button" id="search">Search</button>
+    <div id="stats"></div>
+    <div id="stats-note" hidden>*having at least 1 kanji</div>
+    <div id="export-txt" hidden>Export TXT</div>
+    <progress id="progress" hidden></progress>
+    <div id="list"></div>
+  </div>
+</body>
+
 </html>

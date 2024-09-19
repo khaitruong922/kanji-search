@@ -4,7 +4,7 @@ import re
 default_filename = "term_meta_bank_1.json"
 filename = input(f"Enter the filename (default: {default_filename}): ")
 if not filename:
-    filename = "term_meta_bank_1.json"
+    filename = default_filename
 
 items = []
 

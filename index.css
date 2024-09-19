@@ -101,8 +101,7 @@ html {
   text-align: right;
   width: 2rem;
 }
-#kanji-only-checkbox,
-#contains-all-checkbox {
+input[type='checkbox'] {
   accent-color: blueviolet;
 }
 #progress {

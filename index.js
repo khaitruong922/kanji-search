@@ -14,15 +14,19 @@ const kanjiOnlyCheckbox = document.getElementById('kanji-only-checkbox');
 kanjiOnlyCheckbox.addEventListener('change', () => {
   localStorage.setItem('kanjiOnly', kanjiOnlyCheckbox.checked);
 });
-kanjiOnlyCheckbox.checked =
-  localStorage.getItem('kanjiOnly') === 'true' ?? false;
+kanjiOnlyCheckbox.checked = localStorage.getItem('kanjiOnly') === 'true' ?? false;
 
 const containsAllCheckbox = document.getElementById('contains-all-checkbox');
 containsAllCheckbox.addEventListener('change', () => {
   localStorage.setItem('containsAll', containsAllCheckbox.checked);
 });
-containsAllCheckbox.checked =
-  localStorage.getItem('containsAll') === 'true' ?? false;
+containsAllCheckbox.checked = localStorage.getItem('containsAll') === 'true' ?? false;
+
+const inverseResultCheckbox = document.getElementById('inverse-result-checkbox');
+inverseResultCheckbox.addEventListener('change', () => {
+  localStorage.setItem('inverseResult', inverseResultCheckbox.checked);
+});
+inverseResultCheckbox.checked = localStorage.getItem('inverseResult') === 'true' ?? false;
 
 const resultList = document.getElementById('list');
 const stats = document.getElementById('stats');
@@ -110,6 +114,7 @@ const search = async () => {
   const containsAll = containsAllCheckbox.checked;
   const kanjiOnly = kanjiOnlyCheckbox.checked;
   const otherKanjiCount = Number(otherKanjiCountInput.value);
+  const inverseResult = inverseResultCheckbox.checked;
 
   for (const [term, kanjiList, reading, freq] of dict) {
     let termOtherKanjiCount = 0;
@@ -134,16 +139,16 @@ const search = async () => {
 
     const containsAnyCondition = inputKanjiSet.size === 0 || hasAnyKanji;
     const containsAllCondition = !containsAll || hasAllKanji;
-    const otherKanjiCountCondition =
-      otherKanjiCountAny || termOtherKanjiCount === otherKanjiCount;
+    const otherKanjiCountCondition = otherKanjiCountAny || termOtherKanjiCount === otherKanjiCount;
     const kanjiOnlyCondition = !kanjiOnly || termHasOnlyKanji;
 
-    if (
+    const conditionMatch =
       containsAnyCondition &&
       containsAllCondition &&
       otherKanjiCountCondition &&
-      kanjiOnlyCondition
-    ) {
+      kanjiOnlyCondition;
+
+    if ((conditionMatch && !inverseResult) || (!conditionMatch && inverseResult)) {
       items.push([term, kanjiList, reading, freq]);
     }
   }
