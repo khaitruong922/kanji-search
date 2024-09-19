@@ -1,64 +1,64 @@
-const kanjiListInput = document.getElementById("kanji-list-input");
-kanjiListInput.addEventListener("input", () => {
-  localStorage.setItem("kanjiList", kanjiListInput.value);
+const kanjiListInput = document.getElementById('kanji-list-input');
+kanjiListInput.addEventListener('input', () => {
+  localStorage.setItem('kanjiList', kanjiListInput.value);
 });
-kanjiListInput.value = localStorage.getItem("kanjiList") ?? "色";
+kanjiListInput.value = localStorage.getItem('kanjiList') ?? '色';
 
-const otherKanjiCountInput = document.getElementById("other-kanji-count-input");
-otherKanjiCountInput.addEventListener("input", () => {
-  localStorage.setItem("otherKanjiCount", otherKanjiCountInput.value);
+const otherKanjiCountInput = document.getElementById('other-kanji-count-input');
+otherKanjiCountInput.addEventListener('input', () => {
+  localStorage.setItem('otherKanjiCount', otherKanjiCountInput.value);
 });
-otherKanjiCountInput.value = localStorage.getItem("otherKanjiCount") ?? "0";
+otherKanjiCountInput.value = localStorage.getItem('otherKanjiCount') ?? '0';
 
-const kanjiOnlyCheckbox = document.getElementById("kanji-only-checkbox");
-kanjiOnlyCheckbox.addEventListener("change", () => {
-  localStorage.setItem("kanjiOnly", kanjiOnlyCheckbox.checked);
+const kanjiOnlyCheckbox = document.getElementById('kanji-only-checkbox');
+kanjiOnlyCheckbox.addEventListener('change', () => {
+  localStorage.setItem('kanjiOnly', kanjiOnlyCheckbox.checked);
 });
 kanjiOnlyCheckbox.checked =
-  localStorage.getItem("kanjiOnly") === "true" ?? false;
+  localStorage.getItem('kanjiOnly') === 'true' ?? false;
 
-const containsAllCheckbox = document.getElementById("contains-all-checkbox");
-containsAllCheckbox.addEventListener("change", () => {
-  localStorage.setItem("containsAll", containsAllCheckbox.checked);
+const containsAllCheckbox = document.getElementById('contains-all-checkbox');
+containsAllCheckbox.addEventListener('change', () => {
+  localStorage.setItem('containsAll', containsAllCheckbox.checked);
 });
 containsAllCheckbox.checked =
-  localStorage.getItem("containsAll") === "true" ?? false;
+  localStorage.getItem('containsAll') === 'true' ?? false;
 
-const resultList = document.getElementById("list");
-const stats = document.getElementById("stats");
-const statsNote = document.getElementById("stats-note");
-const progress = document.getElementById("progress");
+const resultList = document.getElementById('list');
+const stats = document.getElementById('stats');
+const statsNote = document.getElementById('stats-note');
+const progress = document.getElementById('progress');
 
 let dict;
 let inputKanjiSet = new Set();
 
 const loadDict = async () => {
-  const data = await fetch("dict.json");
+  const data = await fetch('dict.json');
   dict = await data.json();
-  console.log("dict loaded");
+  console.log('dict loaded');
 };
 loadDict();
 
 const createText = (term, reading, freq) => {
-  const div = document.createElement("div");
-  const freqSpan = document.createElement("span");
+  const div = document.createElement('div');
+  const freqSpan = document.createElement('span');
   freqSpan.textContent = `${freq}. `;
-  freqSpan.classList.add("freq");
+  freqSpan.classList.add('freq');
   div.appendChild(freqSpan);
-  const termSpan = document.createElement("span");
-  termSpan.classList.add("term");
+  const termSpan = document.createElement('span');
+  termSpan.classList.add('term');
   for (const char in term) {
-    const charSpan = document.createElement("span");
+    const charSpan = document.createElement('span');
     charSpan.textContent = term[char];
     if (inputKanjiSet.has(term[char])) {
-      charSpan.classList.add("known");
+      charSpan.classList.add('known');
     }
     termSpan.appendChild(charSpan);
   }
   div.appendChild(termSpan);
-  const readingSpan = document.createElement("span");
+  const readingSpan = document.createElement('span');
   readingSpan.textContent = ` (${reading})`;
-  readingSpan.classList.add("reading");
+  readingSpan.classList.add('reading');
   div.appendChild(readingSpan);
   return div;
 };
@@ -101,11 +101,11 @@ const search = async () => {
   const inputKanjiList = kanjiListInput.value;
   inputKanjiSet = new Set(inputKanjiList);
 
-  resultList.innerHTML = "";
-  stats.innerHTML = "";
+  resultList.innerHTML = '';
+  stats.innerHTML = '';
   items.length = 0;
 
-  const otherKanjiCountAny = otherKanjiCountInput.value === "-1";
+  const otherKanjiCountAny = otherKanjiCountInput.value === '-1';
   const containsAll = containsAllCheckbox.checked;
   const kanjiOnly = kanjiOnlyCheckbox.checked;
   const otherKanjiCount = Number(otherKanjiCountInput.value);
@@ -115,7 +115,7 @@ const search = async () => {
     let termHasOnlyKanji = false;
     let termKanjiOverlap = new Set();
 
-    const termWithoutKanjiRepititon = term.replace(/々/g, "");
+    const termWithoutKanjiRepititon = term.replace(/々/g, '');
     if (termWithoutKanjiRepititon === kanjiList) {
       termHasOnlyKanji = true;
     }
@@ -156,5 +156,5 @@ const search = async () => {
   insertResultInBatch();
 };
 
-const btn = document.getElementById("search");
-btn.addEventListener("click", search);
+const btn = document.getElementById('search');
+btn.addEventListener('click', search);
