@@ -1,30 +1,36 @@
+const searchBtn = document.getElementById('search');
 const kanjiListInput = document.getElementById('kanji-list-input');
 kanjiListInput.addEventListener('input', () => {
   localStorage.setItem('kanjiList', kanjiListInput.value);
+  searchBtn.disabled = false;
 });
 kanjiListInput.value = localStorage.getItem('kanjiList') ?? '色';
 
 const otherKanjiCountInput = document.getElementById('other-kanji-count-input');
 otherKanjiCountInput.addEventListener('input', () => {
   localStorage.setItem('otherKanjiCount', otherKanjiCountInput.value);
+  searchBtn.disabled = false;
 });
 otherKanjiCountInput.value = localStorage.getItem('otherKanjiCount') ?? '0';
 
 const kanjiOnlyCheckbox = document.getElementById('kanji-only-checkbox');
 kanjiOnlyCheckbox.addEventListener('change', () => {
   localStorage.setItem('kanjiOnly', kanjiOnlyCheckbox.checked);
+  searchBtn.disabled = false;
 });
 kanjiOnlyCheckbox.checked = localStorage.getItem('kanjiOnly') === 'true' ?? false;
 
 const containsAllCheckbox = document.getElementById('contains-all-checkbox');
 containsAllCheckbox.addEventListener('change', () => {
   localStorage.setItem('containsAll', containsAllCheckbox.checked);
+  searchBtn.disabled = false;
 });
 containsAllCheckbox.checked = localStorage.getItem('containsAll') === 'true' ?? false;
 
 const inverseResultCheckbox = document.getElementById('inverse-result-checkbox');
 inverseResultCheckbox.addEventListener('change', () => {
   localStorage.setItem('inverseResult', inverseResultCheckbox.checked);
+  searchBtn.disabled = false;
 });
 inverseResultCheckbox.checked = localStorage.getItem('inverseResult') === 'true' ?? false;
 
@@ -96,6 +102,7 @@ const insertResultInBatch = async () => {
 };
 
 const search = async () => {
+  searchBtn.disabled = true;
   if (inserting) {
     interrupted = true;
     while (true) {
@@ -175,7 +182,6 @@ const exportTxt = () => {
   a.click();
 };
 
-const btn = document.getElementById('search');
 kanjiListInput.addEventListener('keydown', (e) => {
   if (e.isComposing) {
     return;
@@ -186,5 +192,5 @@ kanjiListInput.addEventListener('keydown', (e) => {
   }
   search();
 });
-btn.addEventListener('click', search);
+searchBtn.addEventListener('click', search);
 exportTxtBtn.addEventListener('click', exportTxt);
