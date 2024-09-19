@@ -166,7 +166,7 @@ const exportTxt = () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'terms.txt';
+  a.download = `terms-${new Date().toISOString()}.txt`;
   a.click();
 };
 
