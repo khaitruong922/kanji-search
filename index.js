@@ -70,7 +70,7 @@ const items = [];
 
 let inserting = false;
 let interrupted = false;
-const BATCH_SIZE = 1000;
+const BATCH_SIZE = 500;
 
 const insertResultInBatch = async () => {
   inserting = true;
