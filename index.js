@@ -12,27 +12,27 @@ const kanjiListInput = document.getElementById("kanji-list-input");
 kanjiListInput.addEventListener("input", () => {
   localStorage.setItem("kanjiList", kanjiListInput.value);
 });
-kanjiListInput.value = localStorage.getItem("kanjiList") || "色";
+kanjiListInput.value = localStorage.getItem("kanjiList") ?? "色";
 
 const otherKanjiCountInput = document.getElementById("other-kanji-count-input");
 otherKanjiCountInput.addEventListener("input", () => {
   localStorage.setItem("otherKanjiCount", otherKanjiCountInput.value);
 });
-otherKanjiCountInput.value = localStorage.getItem("otherKanjiCount") || "0";
+otherKanjiCountInput.value = localStorage.getItem("otherKanjiCount") ?? "0";
 
 const kanjiOnlyCheckbox = document.getElementById("kanji-only-checkbox");
 kanjiOnlyCheckbox.addEventListener("change", () => {
   localStorage.setItem("kanjiOnly", kanjiOnlyCheckbox.checked);
 });
 kanjiOnlyCheckbox.checked =
-  localStorage.getItem("kanjiOnly") === "true" || false;
+  localStorage.getItem("kanjiOnly") === "true" ?? false;
 
 const containsAllCheckbox = document.getElementById("contains-all-checkbox");
 containsAllCheckbox.addEventListener("change", () => {
   localStorage.setItem("containsAll", containsAllCheckbox.checked);
 });
 containsAllCheckbox.checked =
-  localStorage.getItem("containsAll") === "true" || false;
+  localStorage.getItem("containsAll") === "true" ?? false;
 
 const resultList = document.getElementById("list");
 const stats = document.getElementById("stats");
@@ -70,8 +70,12 @@ const search = () => {
 
   const items = [];
   const otherKanjiCountAny = otherKanjiCountInput.value === "-1";
+  const containsAll = containsAllCheckbox.checked;
+  const kanjiOnly = kanjiOnlyCheckbox.checked;
+  const otherKanjiCount = Number(otherKanjiCountInput.value);
+
   for (const [term, kanjiList, reading, freq] of dict) {
-    let otherKanjiCount = 0;
+    let termOtherKanjiCount = 0;
     let termHasOnlyKanji = false;
     let termKanjiOverlap = new Set();
 
@@ -82,7 +86,7 @@ const search = () => {
 
     for (const kanji of kanjiList) {
       if (!inputKanjiSet.has(kanji)) {
-        otherKanjiCount++;
+        termOtherKanjiCount++;
       } else {
         termKanjiOverlap.add(kanji);
       }
@@ -91,16 +95,15 @@ const search = () => {
     const hasAllKanji = termKanjiOverlap.size === inputKanjiSet.size;
     const hasAnyKanji = termKanjiOverlap.size > 0;
 
-    const hasAnyCondition = hasAnyKanji;
-    const hasAllCondition = !containsAllCheckbox.checked || hasAllKanji;
+    const containsAnyCondition = hasAnyKanji;
+    const containsAllCondition = !containsAll || hasAllKanji;
     const otherKanjiCountCondition =
-      otherKanjiCountAny ||
-      otherKanjiCount === Number(otherKanjiCountInput.value);
-    const kanjiOnlyCondition = !kanjiOnlyCheckbox.checked || termHasOnlyKanji;
+      otherKanjiCountAny || termOtherKanjiCount === otherKanjiCount;
+    const kanjiOnlyCondition = !kanjiOnly || termHasOnlyKanji;
 
     if (
-      hasAnyCondition &&
-      hasAllCondition &&
+      containsAnyCondition &&
+      containsAllCondition &&
       otherKanjiCountCondition &&
       kanjiOnlyCondition
     ) {
@@ -111,10 +114,12 @@ const search = () => {
   const percentage = ((items.length / dict.length) * 100).toFixed(4);
   stats.innerHTML = `${items.length} of ${dict.length} entries (${percentage}%)`;
 
-  for (const [term, kanjiList, reading, freq] of items) {
-    const div = createText(term, reading, freq);
-    resultList.appendChild(div);
-  }
+  setTimeout(() => {
+    for (const [term, kanjiList, reading, freq] of items) {
+      const div = createText(term, reading, freq);
+      resultList.appendChild(div);
+    }
+  }, 0);
 };
 
 const btn = document.getElementById("search");
