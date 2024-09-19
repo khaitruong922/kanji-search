@@ -36,6 +36,7 @@ containsAllCheckbox.checked =
 
 const resultList = document.getElementById("list");
 const stats = document.getElementById("stats");
+const statsNote = document.getElementById("stats-note");
 
 const createText = (term, reading, freq) => {
   const div = document.createElement("div");
@@ -95,7 +96,7 @@ const search = () => {
     const hasAllKanji = termKanjiOverlap.size === inputKanjiSet.size;
     const hasAnyKanji = termKanjiOverlap.size > 0;
 
-    const containsAnyCondition = hasAnyKanji;
+    const containsAnyCondition = inputKanjiSet.size === 0 || hasAnyKanji;
     const containsAllCondition = !containsAll || hasAllKanji;
     const otherKanjiCountCondition =
       otherKanjiCountAny || termOtherKanjiCount === otherKanjiCount;
@@ -112,7 +113,8 @@ const search = () => {
   }
 
   const percentage = ((items.length / dict.length) * 100).toFixed(4);
-  stats.innerHTML = `${items.length} of ${dict.length} entries (${percentage}%)`;
+  statsNote.hidden = false;
+  stats.innerHTML = `${items.length} of ${dict.length} entries* (${percentage}%)`;
 
   setTimeout(() => {
     for (const [term, kanjiList, reading, freq] of items) {

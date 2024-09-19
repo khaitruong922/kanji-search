@@ -61,6 +61,11 @@ html {
   font-size: 1.25rem;
   font-weight: 500;
 }
+#stats-note {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #6b6b6b;
+}
 #filter {
   margin-bottom: 1rem;
 }
