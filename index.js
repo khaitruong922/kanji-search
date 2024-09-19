@@ -1,13 +1,3 @@
-let dict;
-let inputKanjiSet = new Set();
-
-const loadJSON = async () => {
-  const data = await fetch("dict.json");
-  dict = await data.json();
-  console.log("dict loaded");
-};
-loadJSON();
-
 const kanjiListInput = document.getElementById("kanji-list-input");
 kanjiListInput.addEventListener("input", () => {
   localStorage.setItem("kanjiList", kanjiListInput.value);
@@ -37,6 +27,17 @@ containsAllCheckbox.checked =
 const resultList = document.getElementById("list");
 const stats = document.getElementById("stats");
 const statsNote = document.getElementById("stats-note");
+const progress = document.getElementById("progress");
+
+let dict;
+let inputKanjiSet = new Set();
+
+const loadJSON = async () => {
+  const data = await fetch("dict.json");
+  dict = await data.json();
+  console.log("dict loaded");
+};
+loadJSON();
 
 const createText = (term, reading, freq) => {
   const div = document.createElement("div");
@@ -62,14 +63,49 @@ const createText = (term, reading, freq) => {
   return div;
 };
 
-const search = () => {
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const items = [];
+
+let inserting = false;
+let interrupted = false;
+
+const insertResultInBatch = async () => {
+  const chunkSize = 1000;
+  inserting = true;
+  for (let i = 0; i < items.length; i += chunkSize) {
+    progress.value = Math.min(i + chunkSize, items.length);
+    if (interrupted) {
+      inserting = false;
+      interrupted = false;
+      return;
+    }
+    const chunk = items.slice(i, i + chunkSize);
+    for (const [term, kanjiList, reading, freq] of chunk) {
+      const div = createText(term, reading, freq);
+      resultList.appendChild(div);
+    }
+    await sleep(0);
+  }
+  inserting = false;
+};
+
+const search = async () => {
+  console.log("inserting", inserting, "interrupted", interrupted);
+  if (inserting) {
+    interrupted = true;
+    while (true) {
+      await sleep(1000);
+      if (!inserting) break;
+    }
+  }
   const inputKanjiList = kanjiListInput.value;
   inputKanjiSet = new Set(inputKanjiList);
 
   resultList.innerHTML = "";
   stats.innerHTML = "";
+  items.length = 0;
 
-  const items = [];
   const otherKanjiCountAny = otherKanjiCountInput.value === "-1";
   const containsAll = containsAllCheckbox.checked;
   const kanjiOnly = kanjiOnlyCheckbox.checked;
@@ -115,13 +151,10 @@ const search = () => {
   const percentage = ((items.length / dict.length) * 100).toFixed(4);
   statsNote.hidden = false;
   stats.innerHTML = `${items.length} of ${dict.length} entries* (${percentage}%)`;
+  progress.hidden = false;
+  progress.max = items.length;
 
-  setTimeout(() => {
-    for (const [term, kanjiList, reading, freq] of items) {
-      const div = createText(term, reading, freq);
-      resultList.appendChild(div);
-    }
-  }, 0);
+  insertResultInBatch();
 };
 
 const btn = document.getElementById("search");

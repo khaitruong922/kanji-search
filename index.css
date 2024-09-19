@@ -81,3 +81,8 @@ html {
 #contains-all-checkbox {
   accent-color: blueviolet;
 }
+#progress {
+  margin-top: 0.75rem;
+  accent-color: blueviolet;
+  width: 200px;
+}
