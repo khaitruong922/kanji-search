@@ -24,8 +24,12 @@
         <input type="number" id="other-kanji-count-input" value="0">
       </div>
       <div class="filter-item">
-        <label for="contains-reading-checkbox">Contains reading</label>
-        <input type="text" id="contains-reading-input">
+        <label for="contains-reading-input">Contains reading</label>
+        <div class="row">
+          <input type="text" id="contains-reading-input">
+          <label class="flex-default" for="exact-reading-checkbox">Exact</label>
+          <input type="checkbox" id="exact-reading-checkbox">
+        </div>
       </div>
       <div class="filter-item">
         <label for="kanji-only-checkbox">Kanji only</label>

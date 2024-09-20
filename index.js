@@ -1,42 +1,51 @@
 const searchBtn = document.getElementById('search');
+
 const kanjiListInput = document.getElementById('kanji-list-input');
-kanjiListInput.addEventListener('input', () => {
-  localStorage.setItem('kanjiList', kanjiListInput.value);
+kanjiListInput.addEventListener('input', (e) => {
+  localStorage.setItem('kanjiList', e.target.value);
   searchBtn.disabled = false;
 });
 kanjiListInput.value = localStorage.getItem('kanjiList') ?? '色';
 
 const otherKanjiCountInput = document.getElementById('other-kanji-count-input');
-otherKanjiCountInput.addEventListener('input', () => {
-  localStorage.setItem('otherKanjiCount', otherKanjiCountInput.value);
+otherKanjiCountInput.addEventListener('input', (e) => {
+  localStorage.setItem('otherKanjiCount', e.target.value);
   searchBtn.disabled = false;
 });
 otherKanjiCountInput.value = localStorage.getItem('otherKanjiCount') ?? '0';
 
 const containsReadingInput = document.getElementById('contains-reading-input');
-containsReadingInput.addEventListener('input', () => {
-  localStorage.setItem('containsReading', containsReadingInput.value);
+containsReadingInput.addEventListener('input', (e) => {
+  localStorage.setItem('containsReading', e.target.value);
   searchBtn.disabled = false;
 });
 containsReadingInput.value = localStorage.getItem('containsReading') ?? '';
 
+const exactReadingCheckbox = document.getElementById('exact-reading-checkbox');
+exactReadingCheckbox.addEventListener('change', (e) => {
+  localStorage.setItem('exactReading', e.target.checked);
+  searchBtn.disabled = false;
+});
+exactReadingCheckbox.checked = localStorage.getItem('exactReading') === 'true' ?? false;
+
 const kanjiOnlyCheckbox = document.getElementById('kanji-only-checkbox');
-kanjiOnlyCheckbox.addEventListener('change', () => {
-  localStorage.setItem('kanjiOnly', kanjiOnlyCheckbox.checked);
+kanjiOnlyCheckbox.addEventListener('change', (e) => {
+  localStorage.setItem('kanjiOnly', e.target.checked);
   searchBtn.disabled = false;
 });
 kanjiOnlyCheckbox.checked = localStorage.getItem('kanjiOnly') === 'true' ?? false;
 
 const containsAllCheckbox = document.getElementById('contains-all-checkbox');
-containsAllCheckbox.addEventListener('change', () => {
-  localStorage.setItem('containsAll', containsAllCheckbox.checked);
+containsAllCheckbox.addEventListener('change', (e) => {
+  localStorage.setItem('containsAll', e.target.checked);
   searchBtn.disabled = false;
 });
 containsAllCheckbox.checked = localStorage.getItem('containsAll') === 'true' ?? false;
 
 const inverseResultCheckbox = document.getElementById('inverse-result-checkbox');
-inverseResultCheckbox.addEventListener('change', () => {
-  localStorage.setItem('inverseResult', inverseResultCheckbox.checked);
+inverseResultCheckbox.addEventListener('change', (e) => {
+  console.log(e.target.value);
+  localStorage.setItem('inverseResult', e.target.checked);
   searchBtn.disabled = false;
 });
 inverseResultCheckbox.checked = localStorage.getItem('inverseResult') === 'true' ?? false;
@@ -123,6 +132,7 @@ const insertResultInBatch = async () => {
 };
 
 const search = async () => {
+  if (searchBtn.disabled) return;
   searchBtn.disabled = true;
   if (inserting) {
     interrupted = true;
@@ -141,6 +151,7 @@ const search = async () => {
   const otherKanjiCountAny = otherKanjiCountInput.value === '-1';
   const otherKanjiCount = Number(otherKanjiCountInput.value);
   const containsReadingSubstr = containsReadingInput.value.trim();
+  const exactReading = exactReadingCheckbox.checked;
   const containsAll = containsAllCheckbox.checked;
   const kanjiOnly = kanjiOnlyCheckbox.checked;
   const inverseResult = inverseResultCheckbox.checked;
@@ -185,7 +196,9 @@ const search = async () => {
     if (computeConditionWithInverse(conditionMatch, inverseResult)) {
       if (containsReadingSubstr) {
         // optimize .includes() calls
-        const containsReading = reading.includes(containsReadingSubstr);
+        const containsReading = exactReading
+          ? reading === containsReadingSubstr
+          : reading.includes(containsReadingSubstr);
         if (computeConditionWithInverse(containsReading, inverseResult)) {
           items.push([term, kanjiList, reading, freq]);
         }
@@ -217,7 +230,7 @@ const exportTxt = () => {
   a.click();
 };
 
-kanjiListInput.addEventListener('keydown', (e) => {
+const searchOnEnter = (e) => {
   if (e.isComposing) {
     return;
   }
@@ -226,6 +239,10 @@ kanjiListInput.addEventListener('keydown', (e) => {
     return;
   }
   search();
-});
+};
+
+kanjiListInput.addEventListener('keydown', searchOnEnter);
+otherKanjiCountInput.addEventListener('keydown', searchOnEnter);
+containsReadingInput.addEventListener('keydown', searchOnEnter);
 searchBtn.addEventListener('click', search);
 exportTxtBtn.addEventListener('click', exportTxt);
