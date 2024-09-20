@@ -36,12 +36,12 @@
         <input type="checkbox" id="kanji-only-checkbox">
       </div>
       <div class="filter-item">
-        <label>Contains all kanji in list</label>
-        <input type="checkbox" id="contains-all-checkbox">
-      </div>
-      <div class="filter-item">
-        <label>Inverse result</label>
-        <input type="checkbox" id="inverse-result-checkbox">
+        <label>Search mode</label>
+        <select id="search-mode-select">
+          <option value="any">Includes any</option>
+          <option value="all">Includes all</option>
+          <option value="none">Includes none</option>
+        </select>
       </div>
     </div>
     <button type="button" id="search">Search</button>

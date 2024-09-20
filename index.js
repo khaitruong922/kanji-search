@@ -35,20 +35,12 @@ kanjiOnlyCheckbox.addEventListener('change', (e) => {
 });
 kanjiOnlyCheckbox.checked = localStorage.getItem('kanjiOnly') === 'true' ?? false;
 
-const containsAllCheckbox = document.getElementById('contains-all-checkbox');
-containsAllCheckbox.addEventListener('change', (e) => {
-  localStorage.setItem('containsAll', e.target.checked);
+const searchModeSelect = document.getElementById('search-mode-select');
+searchModeSelect.addEventListener('change', (e) => {
+  localStorage.setItem('searchMode', e.target.value);
   searchBtn.disabled = false;
 });
-containsAllCheckbox.checked = localStorage.getItem('containsAll') === 'true' ?? false;
-
-const inverseResultCheckbox = document.getElementById('inverse-result-checkbox');
-inverseResultCheckbox.addEventListener('change', (e) => {
-  console.log(e.target.value);
-  localStorage.setItem('inverseResult', e.target.checked);
-  searchBtn.disabled = false;
-});
-inverseResultCheckbox.checked = localStorage.getItem('inverseResult') === 'true' ?? false;
+searchModeSelect.value = localStorage.getItem('searchMode') ?? 'any';
 
 const resultList = document.getElementById('list');
 const stats = document.getElementById('stats');
@@ -66,10 +58,6 @@ const loadDict = async () => {
   console.log('dict loaded');
 };
 loadDict();
-
-const computeConditionWithInverse = (condition, inverse) => {
-  return (condition && !inverse) || (!condition && inverse);
-};
 
 const createText = (term, reading, freq) => {
   const div = document.createElement('div');
@@ -152,14 +140,12 @@ const search = async () => {
   const otherKanjiCount = Number(otherKanjiCountInput.value);
   const containsReadingSubstr = containsReadingInput.value.trim();
   const exactReading = exactReadingCheckbox.checked;
-  const containsAll = containsAllCheckbox.checked;
+  const searchMode = searchModeSelect.value;
   const kanjiOnly = kanjiOnlyCheckbox.checked;
-  const inverseResult = inverseResultCheckbox.checked;
 
-  readingHighlightRegex =
-    containsReadingSubstr && !inverseResult
-      ? new RegExp(`(${containsReadingSubstr})`, 'g')
-      : undefined;
+  readingHighlightRegex = containsReadingSubstr
+    ? new RegExp(`(${containsReadingSubstr})`, 'g')
+    : undefined;
 
   for (const [term, kanjiList, reading, freq] of dict) {
     let termOtherKanjiCount = 0;
@@ -182,24 +168,25 @@ const search = async () => {
     const hasAllKanji = termKanjiOverlap.size === inputKanjiSet.size;
     const hasAnyKanji = termKanjiOverlap.size > 0;
 
-    const containsAnyCondition = inputKanjiSet.size === 0 || hasAnyKanji;
-    const containsAllCondition = !containsAll || hasAllKanji;
+    const searchModeAnyCondition = searchMode === 'any' && hasAnyKanji;
+    const searchModeAllCondition = searchMode === 'all' && hasAllKanji;
+    const searchModeNoneCondition = searchMode === 'none' && !hasAnyKanji;
+
+    const searchModeCondition =
+      searchModeAnyCondition || searchModeAllCondition || searchModeNoneCondition;
+
     const otherKanjiCountCondition = otherKanjiCountAny || termOtherKanjiCount === otherKanjiCount;
     const kanjiOnlyCondition = !kanjiOnly || termHasOnlyKanji;
 
-    const conditionMatch =
-      containsAnyCondition &&
-      containsAllCondition &&
-      otherKanjiCountCondition &&
-      kanjiOnlyCondition;
+    const conditionMatch = searchModeCondition && otherKanjiCountCondition && kanjiOnlyCondition;
 
-    if (computeConditionWithInverse(conditionMatch, inverseResult)) {
+    if (conditionMatch) {
       if (containsReadingSubstr) {
         // optimize .includes() calls
         const containsReading = exactReading
           ? reading === containsReadingSubstr
           : reading.includes(containsReadingSubstr);
-        if (computeConditionWithInverse(containsReading, inverseResult)) {
+        if (containsReading) {
           items.push([term, kanjiList, reading, freq]);
         }
       } else {
