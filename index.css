@@ -4,6 +4,7 @@
 html {
   overflow-y: scroll;
 }
+
 .term,
 .reading,
 #kanji-list-input {
@@ -15,6 +16,7 @@ html {
   border: 2px solid blueviolet;
   outline: none;
 }
+
 #main {
   padding: 1rem;
   display: flex;
@@ -42,6 +44,10 @@ html {
   color: #6b6b6b;
 }
 .known {
+  color: blueviolet;
+  font-weight: 600;
+}
+.reading-highlight {
   color: blueviolet;
   font-weight: 600;
 }
@@ -101,6 +107,17 @@ html {
   text-align: right;
   width: 2rem;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  display: none;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: none;
+  border: 2px solid blueviolet;
+  outline: none;
+}
+
 input[type='checkbox'] {
   accent-color: blueviolet;
 }
@@ -108,4 +125,16 @@ input[type='checkbox'] {
   margin-top: 0.75rem;
   accent-color: blueviolet;
   width: 200px;
+}
+
+#contains-reading-input {
+  height: 1.5rem;
+  width: 6rem;
+  text-align: right;
+  padding-right: 0.25rem;
+}
+#contains-reading-input,
+#contains-reading-input:focus {
+  border: 2px solid blueviolet;
+  outline: none;
 }
