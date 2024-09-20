@@ -5,6 +5,8 @@ html {
   overflow-y: scroll;
   --pink: #f278d9;
   --blue: #454682;
+  --gray: #6b6b6b;
+  --black: #272727;
   color: var(--blue);
 }
 
@@ -58,16 +60,16 @@ input:-webkit-autofill {
   font-weight: 500;
   color: var(--blue);
 }
-.reading {
-  font-size: 1rem;
-  color: var(--blue);
-}
 .known {
   color: var(--pink);
   font-weight: 600;
 }
+.reading {
+  font-size: 1rem;
+  color: var(--gray);
+}
 .reading-highlight {
-  color: var(--pink);
+  color: var(--blue);
   font-weight: 600;
 }
 #header {
@@ -77,6 +79,7 @@ input:-webkit-autofill {
 }
 #list {
   margin-top: 1rem;
+  margin-right: 4rem;
 }
 #search {
   background-color: var(--pink);
@@ -98,7 +101,7 @@ input:-webkit-autofill {
 #stats-note {
   margin-top: 0.25rem;
   font-size: 0.75rem;
-  color: #6b6b6b;
+  color: var(--gray);
   text-align: center;
 }
 #export-txt {
