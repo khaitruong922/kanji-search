@@ -242,7 +242,5 @@ const searchOnEnter = (e) => {
 };
 
 kanjiListInput.addEventListener('keydown', searchOnEnter);
-otherKanjiCountInput.addEventListener('keydown', searchOnEnter);
-containsReadingInput.addEventListener('keydown', searchOnEnter);
 searchBtn.addEventListener('click', search);
 exportTxtBtn.addEventListener('click', exportTxt);
