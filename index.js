@@ -5,14 +5,14 @@ kanjiListInput.addEventListener('input', (e) => {
   localStorage.setItem('kanjiList', e.target.value);
   searchBtn.disabled = false;
 });
-kanjiListInput.value = localStorage.getItem('kanjiList') ?? '色';
+kanjiListInput.value = localStorage.getItem('kanjiList') ?? '恋色';
 
 const otherKanjiCountInput = document.getElementById('other-kanji-count-input');
 otherKanjiCountInput.addEventListener('input', (e) => {
   localStorage.setItem('otherKanjiCount', e.target.value);
   searchBtn.disabled = false;
 });
-otherKanjiCountInput.value = localStorage.getItem('otherKanjiCount') ?? '0';
+otherKanjiCountInput.value = localStorage.getItem('otherKanjiCount') ?? '-1';
 
 const containsReadingInput = document.getElementById('contains-reading-input');
 containsReadingInput.addEventListener('input', (e) => {
@@ -120,6 +120,7 @@ const insertResultInBatch = async () => {
 };
 
 const search = async () => {
+  if (!dict) return;
   if (searchBtn.disabled) return;
   searchBtn.disabled = true;
   if (inserting) {
