@@ -55,6 +55,7 @@ let readingHighlightRegex = undefined;
 const loadDict = async () => {
   const data = await fetch('dict.json');
   dict = await data.json();
+  searchBtn.hidden = false;
   console.log('dict loaded');
 };
 loadDict();
