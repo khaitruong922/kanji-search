@@ -160,15 +160,15 @@ input[type='checkbox'] {
   width: 200px;
 }
 
-#contains-reading-input {
+#reading-search-input {
   height: 1.5rem;
   width: 6rem;
   text-align: right;
   padding-right: 0.25rem;
   margin-right: 1rem;
 }
-#contains-reading-input,
-#contains-reading-input:focus {
+#reading-search-input,
+#reading-search-input:focus {
   border: 2px solid var(--pink);
   outline: none;
 }

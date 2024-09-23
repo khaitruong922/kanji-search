@@ -24,11 +24,14 @@
         <input type="number" id="other-kanji-count-input" value="0">
       </div>
       <div class="filter-item">
-        <label for="contains-reading-input">Contains reading</label>
+        <label for="reading-search-input">Reading</label>
         <div class="row">
-          <input type="text" id="contains-reading-input">
-          <label class="flex-default">Exact</label>
-          <input type="checkbox" id="exact-reading-checkbox">
+          <input type="text" id="reading-search-input">
+          <select id="reading-match-select">
+            <option value="include">Include</option>
+            <option value="exact">Exact</option>
+            <option value="not-include">Not include</option>
+          </select>
         </div>
       </div>
       <div class="filter-item">

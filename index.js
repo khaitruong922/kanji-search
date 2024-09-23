@@ -14,19 +14,19 @@ otherKanjiCountInput.addEventListener('input', (e) => {
 });
 otherKanjiCountInput.value = localStorage.getItem('otherKanjiCount') ?? '-1';
 
-const containsReadingInput = document.getElementById('contains-reading-input');
-containsReadingInput.addEventListener('input', (e) => {
-  localStorage.setItem('containsReading', e.target.value);
+const readingSearchInput = document.getElementById('reading-search-input');
+readingSearchInput.addEventListener('input', (e) => {
+  localStorage.setItem('readingSearch', e.target.value);
   searchBtn.disabled = false;
 });
-containsReadingInput.value = localStorage.getItem('containsReading') ?? '';
+readingSearchInput.value = localStorage.getItem('readingSearch') ?? '';
 
-const exactReadingCheckbox = document.getElementById('exact-reading-checkbox');
-exactReadingCheckbox.addEventListener('change', (e) => {
-  localStorage.setItem('exactReading', e.target.checked);
+const readingMatchSelect = document.getElementById('reading-match-select');
+readingMatchSelect.addEventListener('change', (e) => {
+  localStorage.setItem('readingMatch', e.target.value);
   searchBtn.disabled = false;
 });
-exactReadingCheckbox.checked = localStorage.getItem('exactReading') === 'true' ?? false;
+readingMatchSelect.value = localStorage.getItem('readingMatch') ?? 'include';
 
 const kanjiOnlyCheckbox = document.getElementById('kanji-only-checkbox');
 kanjiOnlyCheckbox.addEventListener('change', (e) => {
@@ -56,7 +56,6 @@ const loadDict = async () => {
   const data = await fetch('dict.json');
   dict = await data.json();
   searchBtn.hidden = false;
-  console.log('dict loaded');
 };
 loadDict();
 
@@ -140,14 +139,12 @@ const search = async () => {
 
   const otherKanjiCountAny = otherKanjiCountInput.value === '-1';
   const otherKanjiCount = Number(otherKanjiCountInput.value);
-  const containsReadingSubstr = containsReadingInput.value.trim();
-  const exactReading = exactReadingCheckbox.checked;
+  const readingSearch = readingSearchInput.value.trim();
+  const readingMatch = readingMatchSelect.value;
   const searchMode = searchModeSelect.value;
   const kanjiOnly = kanjiOnlyCheckbox.checked;
 
-  readingHighlightRegex = containsReadingSubstr
-    ? new RegExp(`(${containsReadingSubstr})`, 'g')
-    : undefined;
+  readingHighlightRegex = readingSearch ? new RegExp(`(${readingSearch})`, 'g') : undefined;
 
   for (const [term, kanjiList, reading, freq] of dict) {
     let termOtherKanjiCount = 0;
@@ -183,12 +180,15 @@ const search = async () => {
     const conditionMatch = searchModeCondition && otherKanjiCountCondition && kanjiOnlyCondition;
 
     if (conditionMatch) {
-      if (containsReadingSubstr) {
+      if (readingSearch) {
         // optimize .includes() calls
-        const containsReading = exactReading
-          ? reading === containsReadingSubstr
-          : reading.includes(containsReadingSubstr);
-        if (containsReading) {
+        const include = reading.includes(readingSearch);
+        const readingIncludeCondition = readingMatch === 'include' && include;
+        const readingExactCondition = readingMatch === 'exact' && reading === readingSearch;
+        const readingNotIncludeCondition = readingMatch === 'not-include' && !include;
+        const readingConditionMatch =
+          readingIncludeCondition || readingExactCondition || readingNotIncludeCondition;
+        if (readingConditionMatch) {
           items.push([term, kanjiList, reading, freq]);
         }
       } else {
