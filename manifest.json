@@ -3,6 +3,8 @@
   "short_name": "Kanji Search",
   "start_url": "/index.html",
   "display": "standalone",
+  "scope": "/",
+  "orientation": "any",
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "icons": [
