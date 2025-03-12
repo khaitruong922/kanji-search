@@ -1,7 +1,7 @@
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
-      .register('./sw.js')
+      .register('/kanji-search/sw.js')
       .then(() => console.log('Service Worker Registered'))
       .catch((err) => console.log('Service Worker Registration Failed', err));
   });

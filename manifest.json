@@ -1,7 +1,8 @@
 {
   "name": "Kanji Search",
   "short_name": "Kanji Search",
-  "start_url": "/index.html",
+  "id": "/kanji-search/",
+  "start_url": "/kanji-search/",
   "display": "standalone",
   "scope": "/",
   "orientation": "any",
