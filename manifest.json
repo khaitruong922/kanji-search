@@ -4,7 +4,6 @@
   "id": "/kanji-search/",
   "start_url": "/kanji-search/",
   "display": "standalone",
-  "scope": "/",
   "orientation": "any",
   "background_color": "#ffffff",
   "theme_color": "#000000",
