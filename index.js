@@ -1,3 +1,12 @@
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .then(() => console.log('Service Worker Registered'))
+      .catch((err) => console.log('Service Worker Registration Failed', err));
+  });
+}
+
 const searchBtn = document.getElementById('search');
 
 const kanjiListInput = document.getElementById('kanji-list-input');
