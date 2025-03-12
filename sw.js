@@ -20,9 +20,16 @@ self.addEventListener('install', (event) => {
 // Fetch resources
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    }),
+    (async () => {
+      try {
+        const res = await fetch(event.request);
+        const cache = await caches.open('cache');
+        cache.put(event.request.url, res.clone());
+        return res;
+      } catch (error) {
+        return caches.match(event.request);
+      }
+    })(),
   );
 });
 
